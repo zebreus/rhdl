@@ -67,13 +67,6 @@ pub fn compile_design(top: Kernel) -> Result<Module> {
         objects: [(main.fn_id, main.clone())].into_iter().collect(),
         top: main.fn_id,
     };
-    let mut object_count = design.objects.len();
-    loop {
-        elaborate_design(&mut design)?;
-        if design.objects.len() == object_count {
-            break;
-        }
-        object_count = design.objects.len();
-    }
+    elaborate_design(&mut design)?;
     Ok(design)
 }

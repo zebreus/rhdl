@@ -354,8 +354,9 @@ fn execute(design: &Module, fn_id: FunctionId, arguments: Vec<TypedBits>) -> Res
     }
 }
 
-// Given a set of arguments in the form of TypedBits, execute the function described by a Design
-// and then return the result as a TypedBits.
+/// Simulate the function described by a Module.
+///
+/// The arguments need to be supplied as a set of [`TypedBits`] and the result is also a [`TypedBits`].
 pub fn execute_function(design: &Module, arguments: Vec<TypedBits>) -> Result<TypedBits> {
     execute(design, design.top, arguments)
 }
