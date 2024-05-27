@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+/// Information about a clock signal.
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ClockDetails {
     pub name: String,
@@ -9,6 +10,7 @@ pub struct ClockDetails {
 }
 
 impl ClockDetails {
+    /// Create a new clock signal with the given values.
     pub fn new(name: &str, period_in_fs: u64, offset_in_fs: u64, initial_state: bool) -> Self {
         Self {
             name: name.to_string(),
@@ -17,6 +19,7 @@ impl ClockDetails {
             initial_state,
         }
     }
+    /// Check if the clock signal changes to high at the given time.
     pub fn pos_edge_at(&self, time: u64) -> bool {
         if time < self.offset_in_fs {
             return false;
@@ -25,6 +28,7 @@ impl ClockDetails {
         let period = self.period_in_fs;
         time % period == 0
     }
+    /// Check if the clock signal changes to low at the given time.
     pub fn neg_edge_at(&self, time: u64) -> bool {
         if time < self.offset_in_fs {
             return false;
@@ -33,6 +37,7 @@ impl ClockDetails {
         let period = self.period_in_fs;
         time % period == period / 2
     }
+    /// Get the time of the next edge of the clock signal
     pub fn next_edge_after(&self, time: u64) -> u64 {
         if time < self.offset_in_fs {
             return self.offset_in_fs;

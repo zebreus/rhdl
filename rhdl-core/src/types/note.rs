@@ -42,6 +42,12 @@ impl NoteKey for &'static str {
     }
 }
 
+impl NoteKey for &String {
+    fn as_string(&self) -> String {
+        (*self).into()
+    }
+}
+
 impl NoteKey for usize {
     fn as_string(&self) -> String {
         format!("{}", self)

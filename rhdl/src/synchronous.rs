@@ -19,7 +19,7 @@ use rhdl_core::{
     compile_design, generate_verilog, note, note_init_db, note_take, note_time,
     test_module::TestModule, Digital, DigitalFn,
 };
-use rhdl_core::{KernelFnKind, Synchronous, UpdateFn};
+use rhdl_core::{ClockDetails, KernelFnKind, Synchronous, UpdateFn};
 use rhdl_fpga::{make_constrained_verilog, Constraint, PinConstraint};
 use rhdl_macro::{kernel, Digital};
 
@@ -183,15 +183,37 @@ pub fn simulate<M: Synchronous>(
     obj: M,
     inputs: impl Iterator<Item = M::Input>,
 ) -> impl Iterator<Item = M::Output> {
+    simulate_with_clock(obj, inputs, ClockDetails::new("clk", 1_000_000, 0, false))
+        .map(|(output, _time)| output)
+}
+
+pub fn simulate_with_clock<M: Synchronous>(
+    obj: M,
+    inputs: impl Iterator<Item = M::Input>,
+    clock: ClockDetails,
+) -> impl Iterator<Item = (M::Output, u64)> {
     let mut state = M::State::default();
     note_time(0);
     let mut time = 0;
+    let mut clock_state = clock.initial_state;
+
+    // TODO: Respect clock_offset and clock.initial_state
+    // TODO: Investigate creating notes in the simulation function
+    note(&clock.name, clock_state);
     inputs.map(move |input| {
+        time += clock.period_in_fs / 1000 / 2;
+        note_time(time);
+        clock_state = true;
+        note(&clock.name, clock_state);
         let (new_state, output) = M::UPDATE(obj, state, input);
         state = new_state;
-        time += 1_000;
+        let result = (output, time);
+
+        time += clock.period_in_fs / 1000 / 2;
         note_time(time);
-        output
+        clock_state = false;
+        note(&clock.name, clock_state);
+        result
     })
 }
 
