@@ -40,6 +40,7 @@ pub struct SchematicBuilder<'a> {
     slot_map: HashMap<Slot, PinIx>,
 }
 
+/// Build a [`Schematic`] from a function in a module.
 pub fn build_schematic(module: &Module, function: FunctionId) -> Result<Schematic> {
     let object = module.objects.get(&function).ok_or(anyhow!(
         "Function {:?} not found in module {:?}",

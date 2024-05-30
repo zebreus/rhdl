@@ -857,6 +857,11 @@ mod test {
     }
 
     #[test]
+    fn test_is_unsigned_is_correct() {
+        // let kind = Kind::make_l
+    }
+
+    #[test]
     fn test_enum_template_is_correct() {
         let kind = make_enum_kind();
         let len = kind.bits();

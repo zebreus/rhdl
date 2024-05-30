@@ -502,7 +502,12 @@ fn decl(slot: &Slot, obj: &Object) -> Result<String> {
         .ok_or(anyhow!("No type for slot {}", slot))?;
     let signed = if ty.is_signed() { "signed" } else { "" };
     let width = ty.bits();
-    Ok(format!("reg {} [{}:0] r{}", signed, width - 1, slot.reg()?))
+    eprintln!("aaa:start {} {} aaa:end", slot, obj);
+    eprintln!("aaa:start {} {} aaa:end", ty, width);
+    eprintln!("@@@@@@@@@@@@@@@@");
+    let res = Ok(format!("reg {} [{}:0] r{}", signed, width - 1, slot.reg()?));
+    eprintln!("bbb");
+    return res;
 }
 
 pub fn generate_verilog(design: &Module) -> Result<VerilogDescriptor> {

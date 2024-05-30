@@ -10,6 +10,15 @@ use super::{
     circuit_descriptor::CircuitDescriptor, circuit_impl::Circuit, hdl_descriptor::HDLDescriptor,
 };
 
+/// Converts a RHDL circuit into a Verilog module.
+///
+/// # Arguments
+///
+/// * `t` - The circuit to generate the HDL descriptor for.
+///
+/// # Returns
+///
+/// Returns the generated Verilog module as a HDLDescriptor, or an `anyhow::Error` if an error occurred.
 pub fn root_verilog<C: Circuit>(t: &C) -> Result<HDLDescriptor> {
     // Start with the module declaration for the circuit.
     let descriptor = t.descriptor();

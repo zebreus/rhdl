@@ -1148,6 +1148,9 @@ fn cast_literal_to_inferred_type(t: ExprLit, ty: Ty) -> Result<TypedBits> {
             }
         }
         ExprLit::Int(x) => {
+            eprintln!("type of {x} is {ty}");
+            // TODO: There are many more ways to represent int literals
+            let x = x.strip_suffix("u128").unwrap_or(x.as_str());
             if ty.is_unsigned() {
                 let x_as_u128 = if let Some(x) = x.strip_prefix("0b") {
                     u128::from_str_radix(x, 2)?

@@ -236,3 +236,18 @@ endmodule
         }
     }
 }
+
+#[test]
+fn test_stuff() {
+    let dff = DFF::<u8>::default();
+    let mut state = dff.init_state();
+    let mut io = <DFF<u8> as Circuit>::Z::default();
+    for i in 0..10 {
+        let input = DFFI {
+            clock: Clock(i % 2 == 0),
+            data: i,
+        };
+        let output = dff.sim(input, &mut state, &mut io);
+        assert_eq!(output, i);
+    }
+}

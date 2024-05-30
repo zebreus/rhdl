@@ -89,6 +89,13 @@ impl Wire {
     }
 }
 
+/// A visual representation of a digital circuit.
+///
+/// Can be used to generate a dot file using [`crate::generate_dot`].
+///
+/// ```
+/// use crate::schematic::{Schematic, Kind};
+/// ```
 #[derive(Clone, Debug, Default)]
 pub struct Schematic {
     pub pins: Vec<Pin>,

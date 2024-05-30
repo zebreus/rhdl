@@ -2,6 +2,9 @@ use std::collections::HashMap;
 
 use crate::{root_verilog, Circuit, HDLKind};
 
+/// Represents a module in a specific target HDL.
+///
+/// For now it only supports Verilog, but in the future it could support other HDLs.
 #[derive(Clone, Debug)]
 pub struct HDLDescriptor {
     pub name: String,
@@ -31,6 +34,15 @@ impl HDLDescriptor {
     }
 }
 
+/// Converts a RHDL circuit into a module in a specific target HDL. For now only Verilog is supported.
+///
+/// TODO: What is the differnce between this and `as_hdl`?
+/// # Arguments
+///
+/// * `circuit` - The circuit to generate the HDL descriptor for.
+/// * `kind` - The target HDL
+///
+///
 pub fn root_hdl<C: Circuit>(circuit: &C, kind: HDLKind) -> anyhow::Result<HDLDescriptor> {
     match kind {
         HDLKind::Verilog => root_verilog(circuit),

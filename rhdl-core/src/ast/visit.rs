@@ -24,6 +24,7 @@ pub trait Visitor {
     fn visit_match_arm(&mut self, node: &Arm) -> Result<()> {
         visit_match_arm(self, node)
     }
+    /// Visitor entry point
     fn visit_kernel_fn(&mut self, node: &KernelFn) -> Result<()> {
         visit_kernel_fn(self, node)
     }

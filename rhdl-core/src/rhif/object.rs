@@ -33,6 +33,7 @@ pub struct SymbolMap {
 pub struct Object {
     pub symbols: SymbolMap,
     pub literals: BTreeMap<Slot, TypedBits>,
+    /// Maps each slot to its type
     pub kind: BTreeMap<Slot, Kind>,
     pub return_slot: Slot,
     pub externals: Vec<ExternalFunction>,

@@ -19,6 +19,9 @@ struct DotWriter<'a, 'b, W: Write> {
     schematic: &'a Schematic,
 }
 
+/// Write the schematic to a dot file.
+///
+/// TODO: Add example and tests
 pub fn write_dot(schematic: &Schematic, trace: Option<&Trace>, mut w: impl Write) -> Result<()> {
     writeln!(w, "digraph schematic {{")?;
     writeln!(w, "rankdir=\"LR\"")?;
