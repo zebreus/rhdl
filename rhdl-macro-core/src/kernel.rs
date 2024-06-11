@@ -747,6 +747,14 @@ impl Context {
                 return Ok(quote! {
                     rhdl_core::ast_builder::block_expr(rhdl_core::ast_builder::block(vec![]))
                 });
+            } else if name.ident == "note_push_path" {
+                return Ok(quote! {
+                    rhdl_core::ast_builder::block_expr(rhdl_core::ast_builder::block(vec![]))
+                });
+            } else if name.ident == "note_pop_path" {
+                return Ok(quote! {
+                    rhdl_core::ast_builder::block_expr(rhdl_core::ast_builder::block(vec![]))
+                });
             } else if name.ident == "default" {
                 return Ok(quote! {
                     rhdl_core::ast_builder::lit_expr(
