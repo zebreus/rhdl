@@ -217,6 +217,47 @@ pub fn simulate_with_clock<M: Synchronous>(
     })
 }
 
+pub fn simulate_first_cycle<M: Synchronous>(
+    obj: M,
+    input: M::Input,
+    clock: &ClockDetails,
+) -> (M::State, M::Output, u64) {
+    let (state, time) = simulation_init(obj, clock);
+    simulate_one_cycle(obj, input, state, time, clock)
+}
+
+pub fn simulation_init<M: Synchronous>(_dut: M, clock: &ClockDetails) -> (M::State, u64) {
+    note_time(0);
+
+    // TODO: Respect clock_offset and clock.initial_state
+    // TODO: Investigate creating notes in the simulation function
+    // TODO: Advance simulation time to before the first rising edge
+    note(&clock.name, clock.initial_state);
+    (M::State::default(), 0)
+}
+
+pub fn simulate_one_cycle<M: Synchronous>(
+    dut: M,
+    input: M::Input,
+    state: M::State,
+    mut time: u64,
+    clock: &ClockDetails,
+) -> (M::State, M::Output, u64) {
+    let mut clock_state = clock.initial_state;
+
+    time += clock.period_in_fs / 1000 / 2;
+    note_time(time);
+    clock_state = !clock_state;
+    note(&clock.name, true);
+    let (new_state, output) = M::UPDATE(dut, state, input);
+
+    time += clock.period_in_fs / 1000 / 2;
+    note_time(time);
+    clock_state = !clock_state;
+    note(&clock.name, false);
+    (new_state, output, time)
+}
+
 pub fn make_verilog_testbench<M: Synchronous>(
     obj: M,
     inputs: impl Iterator<Item = M::Input>,
